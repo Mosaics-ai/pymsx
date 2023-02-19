@@ -1,0 +1,140 @@
+[tool.poetry]
+name = "pymsx"
+version = "0.0.1"
+description = "Mosaics AI Python Client"
+authors = ["mosaics.ai <info@mosaics.ai>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/Mosaics-ai/pymsx"
+homepage = "https://www.mosaics.ai/"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = [
+    "AIOps",
+    "MLOps",
+    "ML Model Registry",
+    "ML Model Store",
+    "ML Monitoring",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+urllib3 = "^1.26.14"
+pandas = "^1.5.3"
+numpy = "^1.24.2"
+pydantic = "^1.10.5"
+dacite = "^1.8.0"
+boto3 = "^1.26.74"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.0.4"
+isort = "^5.12.0"
+black = "^23.1.0"
+pytest = "^7.2.1"
+pytest-cov = "^4.0.0"
+flake8 = "^6.0.0"
+mypy = "^1.0.1"
+interrogate = "^1.5.0"
+
+[tool.poetry.scripts]
+coverage = "pytest --cov=guardian tests/"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+target_version = ['py39']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | local
+  )/
+)
+'''
+
+[tool.pycln]
+all = true
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+plugins = [
+  "pydantic.mypy"
+]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+[tool.coverage.run]
+branch = true
+source = ["pymsx", "tests"]
+omit = ["tests/fixtures/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "def __str__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "if typing.TYPE_CHECKING:"
+]
+
+[tool.coverage.html]
+directory = "cov_html"
+
+[tool.pytest.ini_options]
+testpaths = [
+  "tests",
+]
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-nested-functions = true
+ignore-nested-classes = true
+fail-under = 80
+exclude = ["docs", "build"]
+ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
+# possible values: 0 (minimal output), 1 (-v), 2 (-vv)
+verbose = 1
+quiet = false
+whitelist-regex = []
+color = true
+omit-covered-files = false
+generate-badge = "assets"
+badge-format = "svg"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
