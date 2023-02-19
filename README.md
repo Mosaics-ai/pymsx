@@ -45,7 +45,7 @@ import pandas as pd
 from pymsx import MsxClient
 
 org_id = os.getenv("MSX_ORG_ID")
-username = os.getenv("MSX_USERNAME)
+username = os.getenv("MSX_USERNAME")
 password = os.getenv("MSX_PASSWORD")
 
 # or if using token
