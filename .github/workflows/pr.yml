@@ -6,8 +6,4 @@ on:
 
 jobs:
   quality:
-    uses: ./.github/workflows/_quality.yml
-
-  release:
-    needs: quality
     uses: ./.github/workflows/_build.yml

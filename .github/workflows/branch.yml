@@ -6,5 +6,5 @@ on:
       - '!main'
 
 jobs:
-  quality:
-    uses: ./.github/workflows/_quality.yml
+  build:
+    uses: ./.github/workflows/_build.yml

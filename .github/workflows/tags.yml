@@ -9,11 +9,5 @@ on:
 
 jobs:
   quality:
-    uses: ./.github/workflows/_quality.yml
-
-  release:
-    needs: quality
-    uses: ./.github/workflows/_build.yml
-    uses: ./.github/workflows/_release.yml
     uses: ./.github/workflows/_test_publish.yml
 
