@@ -1,3 +1,3 @@
-"""Entrypoint to onbelay package"""
+"""Entrypoint to pymsx package."""
 
 __version__ = "0.0.1"

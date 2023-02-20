@@ -2,11 +2,10 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pymsx?style=flat-square)](https://pypi.org/project/pymsx/)
 [![Downloads](https://pepy.tech/badge/pymsx)](https://pepy.tech/project/pymsx)
-[![Documentation](assets/interrogate_badge.svg)](https://github.com/Mosaics-ai/pymsx)
 
 This repository contains the source code for Mosaics AI's official python client. This client is currently in pre-alpha version, so feedback is always welcome!
 
-You are welcome to file an issue here for general use cases. You can also contact Databricks Support [here](help.mosaics.ai).
+You are welcome to file an issue here for general use cases. You can also contact Mosaics Support [here](help.mosaics.ai).
 
 ## Requirements
 
