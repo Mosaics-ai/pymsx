@@ -10,4 +10,6 @@ on:
 jobs:
   quality:
     uses: ./.github/workflows/_test_publish.yml
+    secrest:
+      PYPI_TOKEN: {{ secrets.PYPI_TOKEN }}
 
