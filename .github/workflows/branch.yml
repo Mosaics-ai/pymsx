@@ -1,0 +1,10 @@
+name: Branch checks
+
+on:
+  push:
+    branches:    
+      - '!main'
+
+jobs:
+  quality:
+    uses: ./.github/workflows/_quality.yml

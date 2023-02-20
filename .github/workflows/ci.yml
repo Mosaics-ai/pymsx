@@ -1,0 +1,14 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  quality:
+    uses: ./.github/workflows/_quality.yml
+
+  release:
+    needs: quality
+    uses: ./.github/workflows/_build.yml
+    uses: ./.github/workflows/_publish.yml

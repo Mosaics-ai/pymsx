@@ -52,9 +52,6 @@ pydocstyle = "^6.3.0"
 scriv = {extras = ["toml"], version = "^1.2.1"}
 python-semantic-release = "^7.33.2"
 
-[tool.poetry.scripts]
-coverage = "pytest --cov=guardian tests/"
-
 [tool.isort]
 profile = "black"
 
