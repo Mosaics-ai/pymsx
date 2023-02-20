@@ -49,6 +49,7 @@ flake8 = "^6.0.0"
 mypy = "^1.0.1"
 interrogate = "^1.5.0"
 pydocstyle = "^6.3.0"
+scriv = {extras = ["toml"], version = "^1.2.1"}
 
 [tool.poetry.scripts]
 coverage = "pytest --cov=guardian tests/"
@@ -136,6 +137,10 @@ color = true
 omit-covered-files = false
 generate-badge = "assets"
 badge-format = "svg"
+
+[tool.scriv]
+format = "md"
+version = "literal: src/pymsx/__init__.py: __version__"
 
 [build-system]
 requires = ["poetry-core"]
