@@ -1,4 +1,4 @@
-"""Test onbelay
+"""Test pymsx
 
 Test package level functionality.
 """
