@@ -4,7 +4,7 @@ on: workflow_call
 
 jobs:
   quality:
-    uses: ./github/workflows/_quality.yml
+    uses: ./.github/workflows/_quality.yml
 
   build:
     runs-on: ubuntu-latest
