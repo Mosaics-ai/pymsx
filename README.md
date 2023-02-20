@@ -24,10 +24,9 @@ Install the library with `pip install pymsx`
 
 Note: Don't hard-code authentication secrets into your Python. Use environment variables
 
-Username/Password Authentication:
+email/Password Authentication:
 
 ```bash
-export MSX_ORG_ID=***************
 export MSX_USERNAME=*************
 export MSX_PASSWORD=*************
 ```
@@ -42,47 +41,70 @@ Example usage:
 ```python
 import os
 import pandas as pd
-from pymsx import MsxClient
+from pymsx.client import MsxClient
+from pymsx.exceptions import ApiResponseError
 
-org_id = os.getenv("MSX_ORG_ID")
-username = os.getenv("MSX_USERNAME")
-password = os.getenv("MSX_PASSWORD")
+# If no credentials are supplied, then environment variables are required.
+email = "help@mosaics.ai"
+password = "$mosaics123"
 
-# or if using token
-token = os.getenv("MSX_TOKEN")
+# ...or try using an active token.
+# This may fail, see exception handling below.
+token = None
 
+# First create client with active token or credentials
 msx = MsxClient(
-    # required
-    org_id=org_id,
-
-    # if using username/password
-    username=username,
+    # ...using email/password
+    email=email,
     password=password,
-    # or if using token, token will take priority
+    # ...or if using token, token will take priority
     token=token
 )
 
-# add a dataset to your msx system
+# Check the health of your server
+health = msx.health().dict()
 
-# from a DataFrame
+print("Health: ", health)
+
+assert health is not None and health['status'] == 'live'
+
+# Add a dataset to your msx system
+
+# From a DataFrame
 path = "/path/to/dataset/data.csv"
 df = pd.DataFrame(path)
 result = msx.datasets.add(df=df)
 
-# or pass in a string path to read from fs directly
+# Or pass in a string path to read from fs directly
 result = msx.datasets.add(path=path)
 
-if result.ok():
-    print("DataFrame uploaded: ", result.details())
+if result.ok:
+    print("DataFrame uploaded: ", result.details)
 else
-    print("Upload failed: ", result.error())
-
-# not necessary, but allows some cleanup
-msx.disconnect()
+    print("Upload failed: ", result.error)
 ```
 
-In the above example:
-- `org_id` is your Mosaics AI organization identifier.
+Exception handling:
+```python
+
+
+try:
+    try:
+        # An InvalidToken error is raised if the token is expired or incorrect
+        msx = MsxClient(
+            token=token
+        )
+    except InvalidTokenError:
+        print(f"Token invalid, logging in instead.")
+        # Catch all other errors using ApiResponseErrors
+        msx = MsxClient(
+            email=email,
+            password=password
+        )
+except ApiResponseError as e:
+    print(f"Could not create msx client: {e.error}")
+    return
+```
 
 ## Contributing
 
