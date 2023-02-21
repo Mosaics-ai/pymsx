@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/_build.yml
+    uses: ./.github/workflows/_quality.yml
 
   release:
     # https://github.community/t/how-do-i-specify-job-dependency-running-in-another-workflow/16482
@@ -17,11 +17,10 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Checkout code
-      uses: actions/checkout@v2
     - name: Python Semantic Release
       uses: relekang/python-semantic-release@master
       with:

@@ -6,7 +6,7 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Switch to Current Branch
       run: git checkout ${{ env.BRANCH }}
@@ -52,3 +52,6 @@ jobs:
 
     - name: Test with pytest
       run: poetry run pytest -rPs --cov .
+    
+    - name: Does it build?
+      run: poetry build
