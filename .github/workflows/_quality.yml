@@ -7,23 +7,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Switch to Current Branch
+      run: git checkout ${{ env.BRANCH }}
+
     - uses: actions/setup-python@v2
       with:
         python-version: 3.9
+
     - name: Install Python Poetry
       uses: abatilo/actions-poetry@v2.1.0
       with:
         poetry-version: 1.3.2
-    - name: Configure poetry
-      shell: bash
-      run: python -m poetry config virtualenvs.in-project true
+
     - name: View poetry version
       run: poetry --version
-    - name: Run pytest
-      shell: bash
+  
+    - name: Cache Poetry virtualenv
+      uses: actions/cache@v1
+      id: cache
+      with:
+        path: ~/.virtualenvs
+        key: poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          poetry-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Set Poetry config
       run: |
-        # install dependencies
-        poetry install
-        
-        # run pytest
-        pytest -rPs
+        poetry config settings.virtualenvs.in-project false
+        poetry config settings.virtualenvs.path ~/.virtualenvs
+
+    - name: Install Dependencies
+      run: poetry install
+      if: steps.cache.outputs.cache-hit != 'true'
+
+    - name: Code Quality
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        python -m poetry run flake8 . --exclude .venv --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        python -m poetry run flake8 . --exclude .venv --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        # run black to check formatting
+        poetry run black . --check
+
+    - name: Test with pytest
+      run: poetry run pytest -rPs --cov .
