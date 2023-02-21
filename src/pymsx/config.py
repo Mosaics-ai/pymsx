@@ -18,7 +18,10 @@ class Configuration:
     password: Optional[str]
     token: Optional[str]
 
+    # dataset specific
     temp_dir: str
+    allowed_read_exts: list[str]
+    min_stream_size: int
 
     base_url: str
 
@@ -31,14 +34,17 @@ configuration_defaults = {
     "org_header": "X-Org-Id",
     "email": os.getenv("MSX_EMAIL"),
     "password": os.getenv("MSX_PASSWORD"),
+    "allowed_read_exts": [".csv", ".parquet", ".json"],
+    "min_stream_size": 1024 * 1024 * 1024,
 }
 
 
-def app_config(overrides: Optional[dict] = None):
+def app_config(overrides: Optional[dict] = None) -> Configuration:
     """Runtime application config."""
-    return (
+    config: Configuration = (
         dataconf.multi.dict(configuration_defaults)
         .env(env_prefix)
         .dict(overrides or {})
         .on(Configuration)
     )
+    return config
