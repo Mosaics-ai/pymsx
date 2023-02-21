@@ -6,14 +6,12 @@ Classes
 Functions
     handle_unknown_response(msg: Optional[str] = None) -> ApiError
 """
-import json
 import logging
-from dataclasses import asdict
-from typing import Any, Optional, Union
+from typing import Optional
 
-import certifi
-import urllib3
+import requests
 from dacite import from_dict
+from requests import Response
 
 from pymsx.api.datasets import Datasets
 from pymsx.config import Configuration, app_config
@@ -68,12 +66,6 @@ class MsxClient:
             raise ValueError("Either a token or email/password is required.")
 
         try:
-            self.http = self.__create_http_pool()
-        except Exception as e:
-            logger.fatal("Could not create connection pool. Aborting.")
-            raise e
-
-        try:
             _ = self.connect()
             logger.info(f"Sucessfully connected to msx server {self.org_id}")
             self.validated = True
@@ -93,21 +85,9 @@ class MsxClient:
 
     # Internal helpers
 
-    def __create_http_pool(self):
-        return urllib3.PoolManager(ca_certs=certifi.where())
-
     def __get_creds(self) -> Credentials:
         creds = {"email": self.email, "password": self.password}
         return from_dict(data=creds, data_class=Credentials)
-
-    def encode_payload(self, payload: Union[dict, Credentials]) -> bytes:
-        """Encode payload."""
-        payload_dict = payload if isinstance(payload, dict) else asdict(payload)
-        return json.dumps(payload_dict).encode("utf-8")
-
-    def decode_payload(self, res: Any) -> Any:
-        """Decode payload."""
-        return json.loads(res.data.decode("utf-8"))
 
     # TODO: Check for exceptions
     def get_token(self) -> TokenResponse:
@@ -120,21 +100,27 @@ class MsxClient:
         creds = self.__get_creds()
 
         logger.debug(
-            f"Requesting token using url={url}, headers={headers}, creds={creds}"
+            f"Requesting token using url={url}, " "headers={headers}, creds={creds}"
         )
 
-        req = self.http.request(
-            "POST", url, body=self.encode_payload(creds), headers=headers
-        )
+        res = requests.post(url, json=creds.dict(), headers=headers)
+        response = handle_auth_response(res)
 
-        res = self.decode_payload(req)
+        logger.debug("Recieved token response: ", response)
 
-        token_response: TokenResponse = from_dict(data=res, data_class=TokenResponse)
+        if isinstance(response, dict):
+            token_response: TokenResponse = from_dict(
+                data=res.json(), data_class=TokenResponse
+            )
 
-        self.token = token_response.token
-        self.org_id = token_response.orgId
+            self.token = token_response.token
+            self.org_id = token_response.orgId
 
-        return token_response
+            return token_response
+        elif isinstance(response, ApiError):
+            raise ApiResponseError(error=response)
+        else:
+            raise ApiResponseError()
 
     def get_auth_headers(
         self, with_json: bool = False, with_token: bool = True
@@ -160,8 +146,8 @@ class MsxClient:
         """Validate token with remote server."""
         headers = self.get_auth_headers(with_json=False)
         url = f"{self.base_url}/validate"
-        req = self.http.request("GET", url, headers=headers)
-        res = self.decode_payload(req)
+        req = requests.get(url, headers=headers)
+        res = req.json()
 
         if "message" in res:
             # success message
@@ -199,13 +185,27 @@ class MsxClient:
 
         logger.debug(f"Api request using headers={headers}")
 
-        req = self.http.request("GET", url, headers=headers)
-        res = self.decode_payload(req)
+        req = requests.get(url, headers=headers)
+        res = req.json()
 
         if "error" in res:
             raise ApiResponseError(error=from_dict(data=res, data_class=ApiError))
         else:
             return from_dict(data=res, data_class=HealthStatus)
+
+
+def handle_auth_response(res: Response):
+    """Handle authentication responses."""
+    if res.ok:
+        try:
+            return res.json()
+        except requests.exceptions.JSONDecodeError:
+            return res.text
+    else:
+        try:
+            return ApiError(error=f"(Code: {res.status_code}): {res.reason}")
+        except Exception:
+            return ApiError(error="(Code: 0): unknown")
 
 
 def handle_unknown_response(msg: Optional[str] = None) -> ApiError:
