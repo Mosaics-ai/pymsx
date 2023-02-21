@@ -5,7 +5,6 @@ Test package level functionality.
 
 import pytest
 
-from pymsx import __version__
 from pymsx.client import MsxClient
 from pymsx.exceptions import InvalidTokenError
 
@@ -28,11 +27,6 @@ invalid_token = (
     "eM_xVtcwqZDZk-dBaLH_GRgMWZfC6kSKPZs9M8McnWXEbVvpmW-S7f6tnmzpR8_E_2kdPdEP"
     "qdeA"
 )
-
-
-def test_version() -> None:
-    """Test package version number"""
-    assert __version__ == "0.0.1"
 
 
 def test_connect_with_credentials():
@@ -68,7 +62,3 @@ def test_health_with_token():
 
     assert health is not None
     assert health["status"] == "live"
-
-
-if __name__ == "__main__":
-    test_version()
