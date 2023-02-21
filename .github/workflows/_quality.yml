@@ -19,11 +19,11 @@ jobs:
       run: python -m poetry config virtualenvs.in-project true
     - name: View poetry version
       run: poetry --version
-    - name: Install dependencies
+    - name: Run pytest
+      shell: bash
       run: |
         # install dependencies
         poetry install
-    -name: Run pytest
-      run: |
+        
         # run pytest
         pytest -rPs
