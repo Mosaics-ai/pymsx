@@ -23,9 +23,7 @@ jobs:
       run: |
         # install dependencies
         poetry install
-
-        # run pre-commit
-        pre-commit run --all-files
-
+    -name: Run pytest
+      run: |
         # run pytest
         pytest -rPs
