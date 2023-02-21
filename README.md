@@ -1,7 +1,7 @@
 # 🧰  pymsx - Mosaics AI MSX Client for Python
 
 [![PyPI](https://img.shields.io/pypi/v/pymsx?style=flat-square)](https://pypi.org/project/pymsx/)
-[![Interrogate](assets/interrogate_badge.svg)](https://github.com/Mosaics-AI/pymsx)
+[![Interrogate](https://raw.githubusercontent.com/Mosaics-ai/pymsx/main/assets/interrogate_badge.svg)](https://github.com/Mosaics-AI/pymsx)
 
 This repository contains the source code for Mosaics AI's official python client. This client is currently in pre-alpha version, so feedback is always welcome!
 
