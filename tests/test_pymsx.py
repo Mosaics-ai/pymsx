@@ -3,6 +3,7 @@
 Test package level functionality.
 """
 import pytest
+import os
 
 email = "help@mosaics.ai"
 password = "$mosaics123"
@@ -89,9 +90,7 @@ def test_upload():
     """Test multipart upload"""
     from pymsx.client import MsxClient
 
-    csv_file = (
-        "/Users/munnyserver/kairosos/mosaics.ai/pymsx/tests/fixtures/nlp_train.csv"
-    )
+    csv_file = os.path.join(os.path.dirname(__file__), "fixtures", "nlp_train.csv")
 
     print("File path: ", csv_file)
 
