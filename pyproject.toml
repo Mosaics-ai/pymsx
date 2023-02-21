@@ -141,10 +141,15 @@ format = "md"
 version = "literal: src/pymsx/__init__.py: __version__"
 
 [tool.semantic_release]
-version_source = "tag"
+version_variable = [
+    "src/pymsx/__init__.py:__version__"
+]
+version_toml = "pyproject.toml:tool.poetry.version"
 branch = "main"
-upload_to_pypi = false
+major_on_zero = false
+upload_to_pypi = true
 upload_to_release = true
+build_command = "pip install poetry && poetry build"
 
 [build-system]
 requires = ["poetry-core"]
