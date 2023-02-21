@@ -19,7 +19,7 @@ class MsxClient:
     """Main class for access to remote msx functionality."""
 
     validated: bool = False
-    base_url: str = app_config.base_url
+    base_url: str
     org_id: str
 
     def __init__(
@@ -29,9 +29,12 @@ class MsxClient:
         token: Optional[str] = None,
     ):
         """Create a connection to org's remote msx instance."""
-        self.token = token or app_config.token
-        self.email = email or app_config.email
-        self.password = password or app_config.password
+        config = self.config
+
+        self.base_url = config.base_url
+        self.token = token or config.token
+        self.email = email or config.email
+        self.password = password or config.password
 
         if self.token is None and self.email is None and self.password is None:
             raise ValueError("Either a token or email/password is required.")
@@ -52,6 +55,11 @@ class MsxClient:
                 raise InvalidTokenError
             else:
                 raise e
+
+    @property
+    def config(self):
+        """Get runtime application config."""
+        return app_config()
 
     # Internal helpers
 
@@ -111,7 +119,7 @@ class MsxClient:
 
     def add_org_header(self, headers: Optional[dict[str, str]]) -> dict[str, str]:
         """Add custom org header to requests."""
-        org_header = app_config.org_header
+        org_header = self.config.org_header
         return {**(headers or {}), org_header: self.org_id}
 
     def validate_token(self) -> ApiMessage:

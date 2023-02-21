@@ -2,11 +2,7 @@
 
 Test package level functionality.
 """
-
 import pytest
-
-from pymsx.client import MsxClient
-from pymsx.exceptions import InvalidTokenError
 
 email = "help@mosaics.ai"
 password = "$mosaics123"
@@ -31,6 +27,8 @@ invalid_token = (
 
 def test_connect_with_credentials():
     """Test client connection with creds."""
+    from pymsx.client import MsxClient
+
     msx = MsxClient(email=email, password=password)
 
     print("Token: ", msx.token)
@@ -40,14 +38,37 @@ def test_connect_with_credentials():
     assert msx.validated is True
 
 
+def test_connect_with_env(monkeypatch):
+    """Test client connection with env variables."""
+    with monkeypatch.context() as m:
+        """Test client connection use env vars."""
+        m.setenv("MSX_EMAIL", email)
+        m.setenv("MSX_PASSWORD", password)
+
+        from pymsx.client import MsxClient
+
+        msx = MsxClient()
+
+        print("Token: ", msx.token)
+
+        assert msx.token is not None and len(msx.token) > 0
+        assert msx.org_id is not None
+        assert msx.validated is True
+
+
 def test_incorrect_token():
     """Test incorrect token."""
+    from pymsx.client import MsxClient
+    from pymsx.exceptions import InvalidTokenError
+
     with pytest.raises(InvalidTokenError):
         _ = MsxClient(token=invalid_token)
 
 
 def test_health_with_token():
     """Test client health check."""
+    from pymsx.client import MsxClient
+
     msx = MsxClient(email=email, password=password)
 
     assert msx.org_id is not None

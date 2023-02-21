@@ -1,6 +1,7 @@
 # 🧰  pymsx - Mosaics AI MSX Client for Python
 
 [![PyPI](https://img.shields.io/pypi/v/pymsx?style=flat-square)](https://pypi.org/project/pymsx/)
+[![Interrogate](assets/interrogate_badge.svg)](https://github.com/Mosaics-AI/pymsx)
 
 This repository contains the source code for Mosaics AI's official python client. This client is currently in pre-alpha version, so feedback is always welcome!
 
@@ -40,7 +41,6 @@ Example usage:
 import os
 import pandas as pd
 from pymsx.client import MsxClient
-from pymsx.exceptions import ApiResponseError
 
 # If no credentials are supplied, then environment variables are required.
 email = "help@mosaics.ai"
@@ -84,7 +84,8 @@ else
 
 Exception handling:
 ```python
-
+from pymsx.client import MsxClient
+from pymsx.exceptions import ApiResponseError, InvalidTokenError
 
 try:
     try:

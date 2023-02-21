@@ -1,4 +1,5 @@
 """Application wide configuration."""
+import os
 import tempfile
 from dataclasses import dataclass
 from typing import Optional
@@ -28,8 +29,16 @@ configuration_defaults = {
     "temp_dir": tempfile.gettempdir(),
     "base_url": "https://api.mosaics.ai",
     "org_header": "X-Org-Id",
+    "email": os.getenv("MSX_EMAIL"),
+    "password": os.getenv("MSX_PASSWORD"),
 }
 
-app_config = (
-    dataconf.multi.dict(configuration_defaults).env(env_prefix).on(Configuration)
-)
+
+def app_config(overrides: Optional[dict] = None):
+    """Runtime application config."""
+    return (
+        dataconf.multi.dict(configuration_defaults)
+        .env(env_prefix)
+        .dict(overrides or {})
+        .on(Configuration)
+    )
