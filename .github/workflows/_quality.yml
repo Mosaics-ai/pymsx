@@ -22,8 +22,8 @@ jobs:
     - name: Install dependencies
       run: |
         # install dependencies
-        python -m poetry install
-        
+        poetry install
+
         # run pre-commit
         pre-commit run --all-files
 
