@@ -37,17 +37,14 @@ class Datasets:
 
     Args:
         client (:obj: `MsxClient`): the client used to perform remote api requests
-        test_local: (bool, optiona): use a localhost address for msx server.
 
     Attributes:
         client (:obj: `MsxClient`): the client used to perform remote api requests
-        test_local: (bool, optiona): use a localhost address for msx server.
     """
 
-    def __init__(self, client, test_local: bool = False):
+    def __init__(self, client):
         """Create a new Datasets class."""
         self.client = client
-        self.test_local = test_local
 
     def __get_df_size(self, df: pd.DataFrame):
         try:
@@ -188,10 +185,7 @@ class Datasets:
         )
         m = MultipartEncoderMonitor(e, callback)
 
-        if self.test_local:
-            url = "http://localhost:8080/upload"
-        else:
-            url = f"{self.client.base_url}/upload"
+        url = f"{self.client.base_url}/upload"
 
         auth_headers = self.client.get_auth_headers()
         auth_headers = self.client.add_org_header(headers=auth_headers)

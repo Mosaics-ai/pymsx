@@ -1,9 +1,7 @@
 """Test pymsx
 
-Test package level functionality.
+Test client functionality.
 """
-import os
-
 import pytest
 
 email = "help@mosaics.ai"
@@ -84,51 +82,3 @@ def test_health_with_token():
 
     assert health is not None
     assert health["status"] == "live"
-
-
-def test_upload():
-    """Test multipart upload"""
-    from pymsx.client import MsxClient
-
-    csv_file = os.path.join(os.path.dirname(__file__), "fixtures", "nlp_train.csv")
-
-    print("File path: ", csv_file)
-
-    msx = MsxClient(email=email, password=password)
-
-    assert msx.org_id is not None
-    assert msx.token is not None
-    assert msx.validated is True
-
-    json_res = msx.datasets.add(
-        csv_file,
-        # pass through fields for msx triggers
-        test_field1="test_value1",
-        test_field2="test_value2",
-    )
-
-    print("Res json: ", json_res)
-
-    assert json_res is not None and len(json_res["path"]) > 0
-    assert json_res["test_field1"] == "test_value1"
-    assert json_res["test_field2"] == "test_value2"
-
-
-def test_env_config(monkeypatch):
-    """Text env variables setting config."""
-    with monkeypatch.context() as m:
-        test_email = "test_email"
-        test_password = "test_password"
-        base_url = "http://localhost:8080"
-
-        m.setenv("MSX_EMAIL", test_email)
-        m.setenv("MSX_PASSWORD", test_password)
-        m.setenv("MSX_BASE_URL", base_url)
-
-        from pymsx.config import app_config
-
-        config = app_config()
-
-        assert config.email == test_email
-        assert config.password == test_password
-        assert config.base_url == base_url
