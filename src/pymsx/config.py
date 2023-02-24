@@ -1,7 +1,7 @@
 """Application wide configuration."""
 import os
 import tempfile
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Optional
 
 import dataconf
@@ -26,6 +26,8 @@ class Configuration:
     base_url: str
 
     org_header: str
+
+    dict = asdict
 
 
 configuration_defaults = {

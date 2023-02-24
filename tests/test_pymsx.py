@@ -2,8 +2,9 @@
 
 Test package level functionality.
 """
-import pytest
 import os
+
+import pytest
 
 email = "help@mosaics.ai"
 password = "$mosaics123"
@@ -42,7 +43,6 @@ def test_connect_with_credentials():
 def test_connect_with_env(monkeypatch):
     """Test client connection with env variables."""
     with monkeypatch.context() as m:
-        """Test client connection use env vars."""
         m.setenv("MSX_EMAIL", email)
         m.setenv("MSX_PASSWORD", password)
 
@@ -112,3 +112,23 @@ def test_upload():
     assert json_res is not None and len(json_res["path"]) > 0
     assert json_res["test_field1"] == "test_value1"
     assert json_res["test_field2"] == "test_value2"
+
+
+def test_env_config(monkeypatch):
+    """Text env variables setting config."""
+    with monkeypatch.context() as m:
+        test_email = "test_email"
+        test_password = "test_password"
+        base_url = "http://localhost:8080"
+
+        m.setenv("MSX_EMAIL", test_email)
+        m.setenv("MSX_PASSWORD", test_password)
+        m.setenv("MSX_BASE_URL", base_url)
+
+        from pymsx.config import app_config
+
+        config = app_config()
+
+        assert config.email == test_email
+        assert config.password == test_password
+        assert config.base_url == base_url
