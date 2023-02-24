@@ -17,7 +17,7 @@ Classes:
 import io
 import logging
 import pathlib
-from typing import Any, Callable, Optional
+from typing import TYPE_CHECKING, Any, Callable, Optional
 
 import pandas as pd
 import requests
@@ -25,6 +25,10 @@ from requests_toolbelt.multipart.encoder import (
     MultipartEncoder,
     MultipartEncoderMonitor,
 )
+
+if TYPE_CHECKING:
+    from pymsx.client import MsxClient
+
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +46,7 @@ class Datasets:
         client (:obj: `MsxClient`): the client used to perform remote api requests
     """
 
-    def __init__(self, client):
+    def __init__(self, client: "MsxClient"):
         """Create a new Datasets class."""
         self.client = client
 

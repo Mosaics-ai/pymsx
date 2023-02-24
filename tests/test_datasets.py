@@ -29,7 +29,7 @@ def test_upload():
         test_field2="test_value2",
     )
 
-    print("Res json: ", json_res)
+    print("Add dataset response: ", json_res)
 
     assert json_res is not None and len(json_res["path"]) > 0
     assert json_res["test_field1"] == "test_value1"

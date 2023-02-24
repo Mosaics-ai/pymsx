@@ -11,8 +11,11 @@ from typing import Optional
 
 import requests
 from dacite import from_dict
-from requests import Response
 
+import pymsx.handlers as handle
+from pymsx.api.commands import Commands
+
+# api classes
 from pymsx.api.datasets import Datasets
 from pymsx.config import Configuration, app_config
 from pymsx.exceptions import ApiResponseError, InvalidTokenError
@@ -42,6 +45,9 @@ class MsxClient:
         email (str, optional): email if provided
         password (str, optional): password if provided
         token (str): the token being used to communicate to the remote msx server
+
+        datasets (:obj: `Datasets`): Datasets related commands
+        commands (:obj: `Commands`): Commands and task requests.
     """
 
     validated: bool = False
@@ -77,6 +83,7 @@ class MsxClient:
                 raise e
 
         self.datasets = Datasets(self)
+        self.commands = Commands(self)
 
     @property
     def config(self) -> Configuration:
@@ -104,7 +111,7 @@ class MsxClient:
         )
 
         res = requests.post(url, json=creds.dict(), headers=headers)
-        response = handle_auth_response(res)
+        response = handle.handle_response(res)
 
         logger.debug("Recieved token response: ", response)
 
@@ -162,7 +169,7 @@ class MsxClient:
                 raise ApiResponseError(error=from_dict(data=res, data_class=ApiError))
         else:
             # unknown
-            raise ApiResponseError(error=handle_unknown_response())
+            raise ApiResponseError(error=handle.handle_unknown_response())
 
     def connect(self) -> ApiMessage:
         """Connect to msx using supplied credentials."""
@@ -192,24 +199,3 @@ class MsxClient:
             raise ApiResponseError(error=from_dict(data=res, data_class=ApiError))
         else:
             return from_dict(data=res, data_class=HealthStatus)
-
-
-def handle_auth_response(res: Response):
-    """Handle authentication responses."""
-    if res.ok:
-        try:
-            return res.json()
-        except requests.exceptions.JSONDecodeError:
-            return res.text
-    else:
-        try:
-            return ApiError(error=f"(Code: {res.status_code}): {res.reason}")
-        except Exception:
-            return ApiError(error="(Code: 0): unknown")
-
-
-def handle_unknown_response(msg: Optional[str] = None) -> ApiError:
-    """Hanlde unknown response types."""
-    prefix = "Unknown response"
-    message = prefix if msg is None else f"{prefix}: {msg}"
-    return from_dict(data={"error": message}, data_class=ApiError)

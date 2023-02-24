@@ -50,3 +50,12 @@ class HealthStatus:
     time: str
 
     dict = asdict
+
+
+@dataclass
+class CommandArgs:
+    """Schema for issuing msx commands."""
+
+    args: list[str]
+
+    dict = asdict
