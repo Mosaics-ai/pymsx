@@ -123,12 +123,11 @@ class Datasets:
                 passing additional fields to any pipelines or triggers configured to
                 run after upload
 
-        Returns
-        -------
-        {
-            path: str,
-            **kwargs
-        }
+        Returns:
+            {
+                path: str,
+                **kwargs
+            }
         """
         filename = path_or_name
 
