@@ -22,7 +22,7 @@ jobs:
       with:
         fetch-depth: 0
         ref: main
-        token: {{ secrets.BOT_TOKEN }}
+        token: ${{ secrets.BOT_TOKEN }}
     - name: Python Semantic Release
       id: semantic_release
       uses: relekang/python-semantic-release@master
