@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymsx"
-version = "0.2.0"
+version = "0.2.1"
 description = "Mosaics AI Python Client"
 authors = ["mosaics.ai <info@mosaics.ai>"]
 license = "Apache-2.0"
