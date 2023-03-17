@@ -7,6 +7,7 @@ Functions
     handle_unknown_response(msg: Optional[str] = None) -> ApiError
 """
 import logging
+import time
 from typing import Optional
 
 import requests
@@ -19,13 +20,7 @@ from pymoai.api.commands import Commands
 from pymoai.api.datasets import Datasets
 from pymoai.config import Configuration, app_config
 from pymoai.exceptions import ApiResponseError, InvalidTokenError
-from pymoai.schemas import (
-    ApiError,
-    ApiMessage,
-    Credentials,
-    HealthStatus,
-    TokenResponse,
-)
+from pymoai.schemas import ApiError, ApiMessage, Credentials, TokenResponse
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +134,7 @@ class MoaiClient:
         self, with_json: bool = False, with_token: bool = True
     ) -> dict[str, str]:
         """Get auth headers."""
-        headers: dict[str, str] = {}
+        headers: dict[str, str] = {"X-Request-Id": str(round(time.time()))}
         if with_token:
             headers = {**headers, "Authorization": f"Bearer {self.token}"}
 
@@ -154,6 +149,16 @@ class MoaiClient:
         """Add custom org header to requests."""
         org_header = self.config.org_header
         return {**(headers or {}), org_header: self.org_id}
+
+    def parse_response(self, res: requests.Response):
+        """Simple helper function to parse json if header present, otherwise present text repr"""
+        if res is not None:
+            if "application/json" in res.headers.get("Content-Type", ""):
+                return res.json()
+            else:
+                return res.text
+        else:
+            return res
 
     def validate_token(self) -> ApiMessage:
         """Validate token with remote server."""
@@ -190,18 +195,18 @@ class MoaiClient:
 
     # Api calls
 
-    def health(self) -> HealthStatus:
+    def health(self) -> str:
         """Query the current health of the server."""
-        url = f"{self.base_url}/health"
+        url = f"{self.base_url}/healthstatus"
         headers = self.get_auth_headers()
         headers = self.add_org_header(headers=headers)
 
         logger.debug(f"Api request using headers={headers}")
 
-        req = requests.get(url, headers=headers)
-        res = req.json()
+        res = requests.get(url, headers=headers)
+        res = self.parse_response(res)
 
         if "error" in res:
             raise ApiResponseError(error=from_dict(data=res, data_class=ApiError))
         else:
-            return from_dict(data=res, data_class=HealthStatus)
+            return res

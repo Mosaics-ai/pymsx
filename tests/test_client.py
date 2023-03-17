@@ -82,9 +82,7 @@ def test_health_with_token():
 
     health = moai.health()
 
-    health = health.dict()
-
     print("Health: ", health)
 
     assert health is not None
-    assert health["status"] == "live"
+    assert health == "ok"
