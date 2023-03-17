@@ -1,22 +1,22 @@
-"""Test pymsx
+"""Test pymoai
 
 Test api.commands functionality.
 """
-email = "help@mosaics.ai"
-password = "$mosaics123"
+email = "tech@montops.ai"
+password = "$montops123"
 
 
 def test_stdio_response():
     """Test listing metastore data"""
-    from pymsx.client import MsxClient
+    from pymoai.client import MoaiClient
 
-    msx = MsxClient(email=email, password=password)
+    moai = MoaiClient(email=email, password=password)
 
-    assert msx.org_id is not None
-    assert msx.token is not None
-    assert msx.validated is True
+    assert moai.org_id is not None
+    assert moai.token is not None
+    assert moai.validated is True
 
-    res = msx.commands.run("metastore", ["list", "-b", "default"])
+    res = moai.commands.run("metastore", ["list", "-b", "default"])
 
     print("Command response: ", res)
 

@@ -1,7 +1,7 @@
-"""Exceptions thrown by classes in pymsx."""
+"""Exceptions thrown by classes in pymoai."""
 from typing import Optional
 
-from pymsx.schemas import ApiError
+from pymoai.schemas import ApiError
 
 
 class ApiResponseError(Exception):

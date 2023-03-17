@@ -1,30 +1,30 @@
-"""Test pymsx
+"""Test pymoai
 
 Test api.dataset functionality.
 """
 import os
 
-email = "help@mosaics.ai"
-password = "$mosaics123"
+email = "tech@montops.ai"
+password = "$montops123"
 
 
 def test_upload():
     """Test multipart upload"""
-    from pymsx.client import MsxClient
+    from pymoai.client import MoaiClient
 
     csv_file = os.path.join(os.path.dirname(__file__), "fixtures", "nlp_train.csv")
 
     print("File path: ", csv_file)
 
-    msx = MsxClient(email=email, password=password)
+    moai = MoaiClient(email=email, password=password)
 
-    assert msx.org_id is not None
-    assert msx.token is not None
-    assert msx.validated is True
+    assert moai.org_id is not None
+    assert moai.token is not None
+    assert moai.validated is True
 
-    json_res = msx.datasets.add(
+    json_res = moai.datasets.add(
         csv_file,
-        # pass through fields for msx triggers
+        # pass through fields for moai triggers
         test_field1="test_value1",
         test_field2="test_value2",
     )

@@ -4,9 +4,9 @@ Datasets represent remote data and their versions. Data is organized by `dataset
 and versions. Versions are created automatically, and associating versions is done by
 reusing existing `dataset names`.
 
-For example, if uploading file `nlp_train.csv` today, the msx server will store that
+For example, if uploading file `nlp_train.csv` today, the moai server will store that
 dataset under the dataset name `nlp_train`. If I then another, newer file also named
-`nlp_train.csv`, the msx server will automatically associate them, and store the second
+`nlp_train.csv`, the moai server will automatically associate them, and store the second
 dataset as `version 2`.
 
 The same applies to dataframes, passed in with a name, instead of a file path.
@@ -27,7 +27,7 @@ from requests_toolbelt.multipart.encoder import (
 )
 
 if TYPE_CHECKING:
-    from pymsx.client import MsxClient
+    from pymoai.client import MoaiClient
 
 
 logger = logging.getLogger(__name__)
@@ -35,18 +35,18 @@ logger = logging.getLogger(__name__)
 
 class Datasets:
     """
-    Main class for managing datasets on remote msx servers.
+    Main class for managing datasets on remote moai servers.
 
     ...
 
     Args:
-        client (:obj: `MsxClient`): the client used to perform remote api requests
+        client (:obj: `MoaiClient`): the client used to perform remote api requests
 
     Attributes:
-        client (:obj: `MsxClient`): the client used to perform remote api requests
+        client (:obj: `MoaiClient`): the client used to perform remote api requests
     """
 
-    def __init__(self, client: "MsxClient"):
+    def __init__(self, client: "MoaiClient"):
         """Create a new Datasets class."""
         self.client = client
 
@@ -104,7 +104,7 @@ class Datasets:
         **kwargs,
     ):
         """
-        Add a dataset to the connected msx server.
+        Add a dataset to the connected moai server.
 
         If df is None, then first arg is used as `dataset name` otherwise it must be
         a path to a dataset (file on disk, or soon a location that pandas can parse,
@@ -117,9 +117,9 @@ class Datasets:
             target (str, optional): The target (column) of the data that will be used
                 when training. If no target is provided, then the last column will be
                 used.
-            store_s3 (bool, optional): Data can be stored in the isolated msx
+            store_s3 (bool, optional): Data can be stored in the isolated moai
                 environment, or it can be stored in an accessible (secure) S3 bucket
-                that every msx server includes.
+                that every moai server includes.
             df_read_args (dict[str, Any], optional): If df is not defined, then
                 optionally pass in pandas read_* kwargs.
             **kwargs: If kwargs are provided, they will be serialized to dict[str, str]

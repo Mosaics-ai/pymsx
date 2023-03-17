@@ -10,7 +10,7 @@ from typing import Any, Optional, Union
 import requests
 from dacite import from_dict
 
-from pymsx.schemas import ApiError
+from pymoai.schemas import ApiError
 
 logger = logging.getLogger(__name__)
 

@@ -1,11 +1,11 @@
-"""Test pymsx
+"""Test pymoai
 
 Test client functionality.
 """
 import pytest
 
-email = "help@mosaics.ai"
-password = "$mosaics123"
+email = "tech@montops.ai"
+password = "$montops123"
 
 invalid_token = (
     "eyJhbGciOiJSUzI1NiIsImtpZCI6ImFlYjMxMjdiMjRjZTg2MDJjODEyNDUxZThmZTczZDU4"
@@ -27,54 +27,54 @@ invalid_token = (
 
 def test_connect_with_credentials():
     """Test client connection with creds."""
-    from pymsx.client import MsxClient
+    from pymoai.client import MoaiClient
 
-    msx = MsxClient(email=email, password=password)
+    moai = MoaiClient(email=email, password=password)
 
-    print("Token: ", msx.token)
+    print("Token: ", moai.token)
 
-    assert msx.token is not None and len(msx.token) > 0
-    assert msx.org_id is not None
-    assert msx.validated is True
+    assert moai.token is not None and len(moai.token) > 0
+    assert moai.org_id is not None
+    assert moai.validated is True
 
 
 def test_connect_with_env(monkeypatch):
     """Test client connection with env variables."""
     with monkeypatch.context() as m:
-        m.setenv("MSX_EMAIL", email)
-        m.setenv("MSX_PASSWORD", password)
+        m.setenv("MOAI_EMAIL", email)
+        m.setenv("MOAI_PASSWORD", password)
 
-        from pymsx.client import MsxClient
+        from pymoai.client import MoaiClient
 
-        msx = MsxClient()
+        moai = MoaiClient()
 
-        print("Token: ", msx.token)
+        print("Token: ", moai.token)
 
-        assert msx.token is not None and len(msx.token) > 0
-        assert msx.org_id is not None
-        assert msx.validated is True
+        assert moai.token is not None and len(moai.token) > 0
+        assert moai.org_id is not None
+        assert moai.validated is True
 
 
 def test_incorrect_token():
     """Test incorrect token."""
-    from pymsx.client import MsxClient
-    from pymsx.exceptions import InvalidTokenError
+    from pymoai.client import MoaiClient
+    from pymoai.exceptions import InvalidTokenError
 
     with pytest.raises(InvalidTokenError):
-        _ = MsxClient(token=invalid_token)
+        _ = MoaiClient(token=invalid_token)
 
 
 def test_health_with_token():
     """Test client health check."""
-    from pymsx.client import MsxClient
+    from pymoai.client import MoaiClient
 
-    msx = MsxClient(email=email, password=password)
+    moai = MoaiClient(email=email, password=password)
 
-    assert msx.org_id is not None
-    assert msx.token is not None
-    assert msx.validated is True
+    assert moai.org_id is not None
+    assert moai.token is not None
+    assert moai.validated is True
 
-    health = msx.health()
+    health = moai.health()
 
     health = health.dict()
 

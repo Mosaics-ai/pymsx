@@ -54,7 +54,7 @@ class HealthStatus:
 
 @dataclass
 class CommandArgs:
-    """Schema for issuing msx commands."""
+    """Schema for issuing moai commands."""
 
     args: list[str]
 

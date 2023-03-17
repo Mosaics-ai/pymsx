@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "pymsx"
+name = "pymoai"
 version = "0.3.0"
-description = "Mosaics AI Python Client"
-authors = ["mosaics.ai <info@mosaics.ai>"]
+description = "MontOps AI Python Client"
+authors = ["montops.ai <info@montops.ai>"]
 license = "Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/Mosaics-ai/pymsx"
-homepage = "https://www.mosaics.ai/"
+repository = "https://github.com/MontOpsInc/pymoai"
+homepage = "https://www.montops.ai/"
 classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
@@ -98,7 +98,7 @@ warn_untyped_fields = true
 
 [tool.coverage.run]
 branch = true
-source = ["pymsx", "tests"]
+source = ["pymoai", "tests"]
 omit = ["tests/fixtures/*"]
 
 [tool.coverage.report]

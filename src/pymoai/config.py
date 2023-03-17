@@ -6,7 +6,7 @@ from typing import Optional
 
 import dataconf
 
-env_prefix = "MSX_"
+env_prefix = "MOAI_"
 
 
 @dataclass
@@ -32,10 +32,10 @@ class Configuration:
 
 configuration_defaults = {
     "temp_dir": tempfile.gettempdir(),
-    "base_url": "https://api.mosaics.ai",
+    "base_url": "https://api.montops.ai",
     "org_header": "X-Org-Id",
-    "email": os.getenv("MSX_EMAIL"),
-    "password": os.getenv("MSX_PASSWORD"),
+    "email": os.getenv("MOAI_EMAIL"),
+    "password": os.getenv("MOAI_PASSWORD"),
     "allowed_read_exts": [".csv", ".parquet", ".json"],
     "min_stream_size": 1024 * 1024 * 1024,
 }

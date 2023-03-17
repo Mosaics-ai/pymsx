@@ -1,1 +1,1 @@
-"""pymsx test suites."""
+"""pymoai test suites."""

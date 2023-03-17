@@ -1,0 +1,1 @@
+"""Entrypoint to pymoai package."""

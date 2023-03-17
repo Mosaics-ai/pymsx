@@ -1,7 +1,7 @@
-"""MsxClient class for connecting to remote instance.
+"""MoaiClient class for connecting to remote instance.
 
 Classes
-    MsxClient
+    MoaiClient
 
 Functions
     handle_unknown_response(msg: Optional[str] = None) -> ApiError
@@ -12,21 +12,27 @@ from typing import Optional
 import requests
 from dacite import from_dict
 
-import pymsx.handlers as handle
-from pymsx.api.commands import Commands
+import pymoai.handlers as handle
+from pymoai.api.commands import Commands
 
 # api classes
-from pymsx.api.datasets import Datasets
-from pymsx.config import Configuration, app_config
-from pymsx.exceptions import ApiResponseError, InvalidTokenError
-from pymsx.schemas import ApiError, ApiMessage, Credentials, HealthStatus, TokenResponse
+from pymoai.api.datasets import Datasets
+from pymoai.config import Configuration, app_config
+from pymoai.exceptions import ApiResponseError, InvalidTokenError
+from pymoai.schemas import (
+    ApiError,
+    ApiMessage,
+    Credentials,
+    HealthStatus,
+    TokenResponse,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class MsxClient:
+class MoaiClient:
     """
-    Main class for access to remote msx functionality.
+    Main class for access to remote moai functionality.
 
     Note:
         An email, password, or token is required to connect. If passed in, they will
@@ -44,7 +50,7 @@ class MsxClient:
         org_id (str): id of the organization currently connected
         email (str, optional): email if provided
         password (str, optional): password if provided
-        token (str): the token being used to communicate to the remote msx server
+        token (str): the token being used to communicate to the remote moai server
 
         datasets (:obj: `Datasets`): Datasets related commands
         commands (:obj: `Commands`): Commands and task requests.
@@ -60,7 +66,7 @@ class MsxClient:
         password: Optional[str] = None,
         token: Optional[str] = None,
     ):
-        """Create a connection to org's remote msx instance."""
+        """Create a connection to org's remote moai instance."""
         config = self.config
 
         self.base_url = config.base_url
@@ -73,7 +79,7 @@ class MsxClient:
 
         try:
             _ = self.connect()
-            logger.info(f"Sucessfully connected to msx server {self.org_id}")
+            logger.info(f"Sucessfully connected to moai server {self.org_id}")
             self.validated = True
         except ApiResponseError as e:
             logger.error(f"Error connecting: {e.error}")
@@ -172,7 +178,7 @@ class MsxClient:
             raise ApiResponseError(error=handle.handle_unknown_response())
 
     def connect(self) -> ApiMessage:
-        """Connect to msx using supplied credentials."""
+        """Connect to moai using supplied credentials."""
         if self.token is None or self.token == "":
             # try and retrieve an api token
             logger.debug("Fetching token in connect.")

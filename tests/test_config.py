@@ -1,4 +1,4 @@
-"""Test pymsx
+"""Test pymoai
 
 Test application config.
 """
@@ -11,11 +11,11 @@ def test_env_config(monkeypatch):
         test_password = "test_password"
         base_url = "http://localhost:8080"
 
-        m.setenv("MSX_EMAIL", test_email)
-        m.setenv("MSX_PASSWORD", test_password)
-        m.setenv("MSX_BASE_URL", base_url)
+        m.setenv("MOAI_EMAIL", test_email)
+        m.setenv("MOAI_PASSWORD", test_password)
+        m.setenv("MOAI_BASE_URL", base_url)
 
-        from pymsx.config import app_config
+        from pymoai.config import app_config
 
         config = app_config()
 
