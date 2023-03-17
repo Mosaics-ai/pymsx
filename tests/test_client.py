@@ -4,9 +4,6 @@ Test client functionality.
 """
 import pytest
 
-email = "tech@montops.ai"
-password = "$montops123"
-
 invalid_token = (
     "eyJhbGciOiJSUzI1NiIsImtpZCI6ImFlYjMxMjdiMjRjZTg2MDJjODEyNDUxZThmZTczZDU4"
     "MjkyMDg4N2MiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb"
@@ -29,6 +26,9 @@ def test_connect_with_credentials():
     """Test client connection with creds."""
     from pymoai.client import MoaiClient
 
+    email = "tech@montops.ai"
+    password = "$montops123"
+
     moai = MoaiClient(email=email, password=password)
 
     print("Token: ", moai.token)
@@ -41,6 +41,9 @@ def test_connect_with_credentials():
 def test_connect_with_env(monkeypatch):
     """Test client connection with env variables."""
     with monkeypatch.context() as m:
+        email = "tech@montops.ai"
+        password = "$montops123"
+
         m.setenv("MOAI_EMAIL", email)
         m.setenv("MOAI_PASSWORD", password)
 
@@ -67,6 +70,9 @@ def test_incorrect_token():
 def test_health_with_token():
     """Test client health check."""
     from pymoai.client import MoaiClient
+
+    email = "tech@montops.ai"
+    password = "$montops123"
 
     moai = MoaiClient(email=email, password=password)
 
