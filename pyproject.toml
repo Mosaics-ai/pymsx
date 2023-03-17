@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymoai"
-version = "0.3.0"
+version = "0.3.1"
 description = "MontOps AI Python Client"
 authors = ["montops.ai <info@montops.ai>"]
 license = "Apache-2.0"
